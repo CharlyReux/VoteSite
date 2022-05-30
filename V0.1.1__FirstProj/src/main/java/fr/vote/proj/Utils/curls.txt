@@ -1,0 +1,14 @@
+ibuRR1cX
+
+admin: 
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJDRkRUIiwiaWF0IjoxNjUzODMzNzE0LCJlbWFpbCI6ImlidVJSMWNYIn0.xcR8Z27e9pYTcW-kew0EakfNTNW4Sc4zNM7lVX4Juuo
+
+user:
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJDRkRUIiwiaWF0IjoxNjUzODMzNzY4LCJlbWFpbCI6ImNoYXJseUBtYWlsIn0.A3rUOz4L2NG7heBW1f94suN5mSJaQnGIc5XFcqTxhJo
+
+get all polls:
+curl -X GET "http://localhost:8080/api/poll/all" -H "accept: */*" -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJDRkRUIiwiaWF0IjoxNjUzODMzNzE0LCJlbWFpbCI6ImlidVJSMWNYIn0.xcR8Z27e9pYTcW-kew0EakfNTNW4Sc4zNM7lVX4Juuo"
+
+//participate
+curl -X POST "http://localhost:8080/api/userPart/ibuRR1cX/participation/charly%40mail" -H "accept: */*" -H "Content-Type: application/json" -d "{ \"contre\": 0, \"neutre\": 5, \"pour\": 0}" -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJDRkRUIiwiaWF0IjoxNjUzODMzNzY4LCJlbWFpbCI6ImNoYXJseUBtYWlsIn0.A3rUOz4L2NG7heBW1f94suN5mSJaQnGIc5XFcqTxhJo"
+
