@@ -3,9 +3,12 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "V0.1.1__VoteProj": {
+    "front": {
       "projectType": "application",
       "schematics": {
+        "@schematics/angular:component": {
+          "style": "sass"
+        },
         "@schematics/angular:application": {
           "strict": true
         }
@@ -17,18 +20,18 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/v0.1.1--vote-proj",
+            "outputPath": "dist/front",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "sass",
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
-              "src/custom-theme.scss",
-              "src/styles.css"
+              "src/styles.sass"
             ],
             "scripts": []
           },
@@ -69,10 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "V0.1.1__VoteProj:build:production"
+              "browserTarget": "front:build:production"
             },
             "development": {
-              "browserTarget": "V0.1.1__VoteProj:build:development"
+              "browserTarget": "front:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -80,7 +83,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "V0.1.1__VoteProj:build"
+            "browserTarget": "front:build"
           }
         },
         "test": {
@@ -90,12 +93,13 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
+            "inlineStyleLanguage": "sass",
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.sass"
             ],
             "scripts": []
           }
@@ -103,5 +107,5 @@
       }
     }
   },
-  "defaultProject": "V0.1.1__VoteProj"
+  "defaultProject": "front"
 }
