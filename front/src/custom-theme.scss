@@ -1,0 +1,127 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+
+
+//My palette
+
+$orange-cfdt: (
+  50:#f9eae8,
+  100:#fccfbf,
+  200:#fab096,
+  300:#f9926c,
+  400:#f87b4c,
+  500:#f8672d,
+  600:#ed6129,
+  700:#df5a25,
+  800:#d15322,
+  900:#b7471c,
+  contrast: (
+    50:rgba(black, 0.87),
+    100:rgba(black, 0.87),
+    200:rgba(black, 0.87),
+    300:rgba(black, 0.87),
+    400:white,
+    500:white,
+    600:white,
+    700:white,
+    800:white,
+    900:white )
+);
+$gray-cfdt: (
+  50:#fbfbfb,
+  100:#f6f6f6,
+  200:#f1f1f1,
+  300:#e4e4e4,
+  400:#c1c1c1,
+  500:#a2a2a2,
+  600:#797979,
+  700:#656565,
+  800:#464646,
+  900:#242424,
+  contrast:(
+    50:rgba(black, 0.87),
+    100:rgba(black, 0.87),
+    200:rgba(black, 0.87),
+    300:rgba(black, 0.87),
+    400:rgba(black, 0.87),
+    500:rgba(black, 0.87),
+    600:rgba(black, 0.87),
+    700:white,
+    800:white,
+    900:white
+  )
+);
+
+//My typography
+//size,heigh,weight,family,letter-spacing
+$typography-cfdt:mat.define-typography-config(
+  $headline: mat.define-typography-level(60px,0.9em,300),
+  $title: mat.define-typography-level(55px,0.9em,500),
+  $subheading-2: mat.define-typography-level(45px,0.9em,300),
+  $subheading-1: mat.define-typography-level(40px,0.9em,300),
+  $body-1: mat.define-typography-level(45px,0.9em,300),
+  $caption: mat.define-typography-level(0.3em,0.9em,300),/* TODO: */
+  $button: mat.define-typography-level(0.4em,0.9em,300),/* TODO: */
+  $input: mat.define-typography-level(0.4em,0.9em,300),/* TODO: */
+  $font-family:'Lato'/* TODO: find a new font that is better*/
+);
+
+
+
+
+
+
+
+
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$front-primary: mat.define-palette($orange-cfdt, 700,700,700);
+$front-accent: mat.define-palette($gray-cfdt,400,500,800);
+
+// The warn palette is optional (defaults to red).
+//$front-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$front-theme: mat.define-light-theme((
+  color: (
+    primary: $front-primary,
+      accent: $front-accent,
+        /* warn: $front-warn, */
+      )
+      ));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($front-theme);
+@include mat.core($typography-cfdt);
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+h1 {
+  color:#df5a25;
+  text-transform: uppercase;
+}
+
+h2 {
+  color:#656565;
+  text-transform: uppercase;
+}
