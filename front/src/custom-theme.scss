@@ -59,6 +59,30 @@ $gray-cfdt: (
     900:white
   )
 );
+$warn-cfdt: (
+  50:#fffebe,
+  100:#ffcdd2,
+  200:#ef9a9a,
+  300:#e57373,
+  400:#ef5350,
+  500:#f44336,
+  600:#e53935,
+  700:#d32f2f,
+  800:#c62828,
+  900:#b71C1C,
+  contrast:(
+    50:#fffebe,
+    100:#ffcdd2,
+    200:#ef9a9a,
+    300:#e57373,
+    400:#ef5350,
+    500:#f44336,
+    600:#e53935,
+    700:#d32f2f,
+    800:#c62828,
+    900:#b71C1C
+  )
+);
 
 //My typography
 //size,heigh,weight,family,letter-spacing
@@ -85,8 +109,9 @@ $typography-cfdt:mat.define-typography-config(
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$front-primary: mat.define-palette($orange-cfdt, 700,700,700);
+$front-primary: mat.define-palette($orange-cfdt, 700,500,900);
 $front-accent: mat.define-palette($gray-cfdt,400,500,800);
+$front-warn: mat.define-palette($warn-cfdt,500,200,800);
 
 // The warn palette is optional (defaults to red).
 //$front-warn: mat.define-palette(mat.$red-palette);
@@ -97,7 +122,7 @@ $front-theme: mat.define-light-theme((
   color: (
     primary: $front-primary,
       accent: $front-accent,
-        /* warn: $front-warn, */
+        warn: $front-warn,
       )
       ));
 
