@@ -1,0 +1,28 @@
+<div class="main">
+
+    <div class="page-title">
+        <img src="../../assets/Images/logo.gif">
+        <h1>Vote cfdt</h1>
+    </div>
+
+    <form class="form" [formGroup]="logInForm" (ngSubmit)="identifyAdmin()">
+
+        <mat-form-field appearance="fill" class="field">
+            <mat-label>Identifiant de la salle</mat-label>
+            <input matInput placeholder="eX3mPl31" required formControlName="identifier">
+            <mat-error *ngIf="logInForm.get('identifier')?.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="field">
+            <mat-label>Mot de passe administrateur</mat-label>
+            <input matInput required [type]="hide ? 'password' : 'text'" type="text" formControlName="PollPassword">
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="logInForm.get('PollPassword')?.invalid">{{getErrorMessageRequired()}}</mat-error>
+        </mat-form-field>
+        <button mat-raised-button type="submit" [disabled]="logInForm.invalid" class="menu-button"  color="primary">
+            <h6 >Administrer le vote</h6>
+        </button>
+    </form>
+</div>

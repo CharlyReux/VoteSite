@@ -26,12 +26,10 @@ export class JoinPageComponent implements OnInit {
     this.scannerEnabled=!this.scannerEnabled
   }
 
-  scanSucessHandler($event:any) {
-    console.log("alo")
-  }
 
   onCodeResult(resultString:string){
     var url = new URL(resultString);
+    //TODO: verify that the poll exists
     if(url.pathname.startsWith("/identify")){
       this.router.navigate([url.pathname])
     }

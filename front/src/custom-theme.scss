@@ -71,16 +71,16 @@ $warn-cfdt: (
   800:#c62828,
   900:#b71C1C,
   contrast:(
-    50:#fffebe,
-    100:#ffcdd2,
-    200:#ef9a9a,
-    300:#e57373,
-    400:#ef5350,
-    500:#f44336,
-    600:#e53935,
-    700:#d32f2f,
-    800:#c62828,
-    900:#b71C1C
+    50:rgba(black, 0.87),
+    100:rgba(black, 0.87),
+    200:rgba(black, 0.87),
+    300:rgba(black, 0.87),
+    400:rgba(black, 0.87),
+    500:rgba(black, 0.87),
+    600:rgba(black, 0.87),
+    700:white,
+    800:white,
+    900:white
   )
 );
 
@@ -91,10 +91,10 @@ $typography-cfdt:mat.define-typography-config(
   $title: mat.define-typography-level(55px,0.9em,500),
   $subheading-2: mat.define-typography-level(45px,0.9em,300),
   $subheading-1: mat.define-typography-level(40px,0.9em,300),
-  $body-1: mat.define-typography-level(45px,0.9em,300),
-  $caption: mat.define-typography-level(0.3em,0.9em,300),/* TODO: */
-  $button: mat.define-typography-level(0.4em,0.9em,300),/* TODO: */
-  $input: mat.define-typography-level(0.4em,0.9em,300),/* TODO: */
+  $body-1: mat.define-typography-level(30px,0.9em,300),
+  $caption: mat.define-typography-level(0.7em,0.9em,300),/* TODO: */
+  $button: mat.define-typography-level(0.8em,0.9em,300),/* TODO: */
+  $input: mat.define-typography-level(0.6em,0.9em,300),/* TODO: */
   $font-family:'Lato'/* TODO: find a new font that is better*/
 );
 

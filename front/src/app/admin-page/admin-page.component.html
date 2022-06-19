@@ -1,0 +1,20 @@
+<div class="main">
+
+    <div class="page-title">
+        <img src="../../assets/Images/logo.gif">
+        <h1>Vote cfdt</h1>
+    </div>
+
+    <div class="content">
+        <div class="notStarted" *ngIf="!started">
+            <div class="slugQR">
+                <h2>{{routeSlug}}</h2>
+                <qrcode [qrdata]="myAngularxQrCode" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+
+            </div>
+            <button mat-raised-button class="start-button" color="primary">Démarrer le vote<mat-icon>info</mat-icon></button>
+            <!-- TODO:mettre une icone d'info en hover pour dire à l'utilisateur qu'il peut quitter la page (ou un truc plus explicite whatever)-->
+        </div>
+    </div>
+
+</div>

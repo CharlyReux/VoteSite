@@ -25,6 +25,8 @@ export class IdentifyUserPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    //TODO: verify that the voteRoom Exist
   }
 
 }

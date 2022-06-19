@@ -13,16 +13,31 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { IdentifyUserPageComponent } from './identify-user-page/identify-user-page.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatStepperModule} from '@angular/material/stepper';
+import {MatTableModule} from '@angular/material/table';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatListModule} from '@angular/material/list';
 
 // Scanner
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { CreateRoomComponent } from './create-room/create-room.component';
+import { FormsModule } from '@angular/forms';
+import { IdentifyAdminComponent } from './identify-admin/identify-admin.component';
+import { AdminPageComponent } from './admin-page/admin-page.component';
+import { QRCodeModule } from 'angularx-qrcode';
+
+
 
 @NgModule({
   declarations: [
     AppComponent,
     WelcomePageComponent,
     JoinPageComponent,
-    IdentifyUserPageComponent
+    IdentifyUserPageComponent,
+    CreateRoomComponent,
+    IdentifyAdminComponent,
+    AdminPageComponent
   ],
   imports: [
     BrowserModule,
@@ -33,8 +48,15 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
+    MatProgressBarModule,
+    MatStepperModule,
+    MatTableModule,
     ReactiveFormsModule,
-    ZXingScannerModule
+    ZXingScannerModule,
+    FormsModule,
+    MatDividerModule,
+    MatListModule,
+    QRCodeModule
   ],
   providers: [WelcomePageComponent],
   bootstrap: [AppComponent]
