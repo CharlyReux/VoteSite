@@ -92,9 +92,9 @@ $typography-cfdt:mat.define-typography-config(
   $subheading-2: mat.define-typography-level(45px,0.9em,300),
   $subheading-1: mat.define-typography-level(40px,0.9em,300),
   $body-1: mat.define-typography-level(30px,0.9em,300),
-  $caption: mat.define-typography-level(0.7em,0.9em,300),/* TODO: */
-  $button: mat.define-typography-level(0.8em,0.9em,300),/* TODO: */
-  $input: mat.define-typography-level(0.6em,0.9em,300),/* TODO: */
+  $caption: mat.define-typography-level(0.7em,0.9em,300),
+  $button: mat.define-typography-level(0.8em,0.9em,300),
+  $input: mat.define-typography-level(0.6em,0.9em,300),
   $font-family:'Lato'/* TODO: find a new font that is better*/
 );
 

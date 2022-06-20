@@ -26,6 +26,7 @@ import { FormsModule } from '@angular/forms';
 import { IdentifyAdminComponent } from './identify-admin/identify-admin.component';
 import { AdminPageComponent } from './admin-page/admin-page.component';
 import { QRCodeModule } from 'angularx-qrcode';
+import { UserPageComponent } from './user-page/user-page.component';
 
 
 
@@ -37,7 +38,8 @@ import { QRCodeModule } from 'angularx-qrcode';
     IdentifyUserPageComponent,
     CreateRoomComponent,
     IdentifyAdminComponent,
-    AdminPageComponent
+    AdminPageComponent,
+    UserPageComponent
   ],
   imports: [
     BrowserModule,

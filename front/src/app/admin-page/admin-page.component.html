@@ -12,9 +12,19 @@
                 <qrcode [qrdata]="myAngularxQrCode" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
 
             </div>
-            <button mat-raised-button class="start-button" color="primary">Démarrer le vote<mat-icon>info</mat-icon></button>
+            <button mat-raised-button class="start-button" color="primary">Commencer les votes<mat-icon>info</mat-icon></button>
             <!-- TODO:mettre une icone d'info en hover pour dire à l'utilisateur qu'il peut quitter la page (ou un truc plus explicite whatever)-->
         </div>
+        <div class="started" *ngIf="started">
+            <h3>Temps Restant : {{RemainingTimeDate}}</h3>
+            <div class="voteDesc">
+                <h4>{{currentVote.title}} TODO: 1/20</h4>
+                <h5>{{currentVote.description}}</h5>
+            </div>
+            <button mat-raised-button [disabled]="voteState!='begin'" (click)="startVote()" class="next-button" color="primary">Démarrer le vote</button>
+            <button mat-raised-button [disabled]="voteState!='ended'" (click)="nextVote()" class="next-button" color="primary">Vote suivant</button>
+        </div>
+
     </div>
 
 </div>
