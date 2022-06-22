@@ -18,6 +18,8 @@ import {MatStepperModule} from '@angular/material/stepper';
 import {MatTableModule} from '@angular/material/table';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatListModule} from '@angular/material/list';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 
 // Scanner
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
@@ -58,7 +60,8 @@ import { UserPageComponent } from './user-page/user-page.component';
     FormsModule,
     MatDividerModule,
     MatListModule,
-    QRCodeModule
+    QRCodeModule,
+    MatProgressSpinnerModule
   ],
   providers: [WelcomePageComponent],
   bootstrap: [AppComponent]

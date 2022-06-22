@@ -4,8 +4,37 @@
         <h1>Vote cfdt</h1>
     </div>
     <div class="content">
-        <div class="loading"></div>
-        <div class="voting"></div>
+        <div class="loading" *ngIf="!voting">
+            <h3>Le vote va bientôt commencer...</h3>
+            <mat-progress-spinner color="primary" mode="indeterminate">
+        </mat-progress-spinner>
+        </div>
+        <div class="voting" *ngIf="voting">
+            <h3>Temps Restant : {{RemainingTimeDate}}</h3>
+            <div class="voteDesc">
+                <h4>{{currentVote.title}}</h4>
+                <h5>{{currentVote.description}}</h5>
+            </div>
+            <div class ="forAgainst">
+                <div>
+                    <h4>Pour</h4>
+                    <input [disabled]="hasVoted" matInput (change)="updateSlidders(1)" [value]="pour" type="number" [(ngModel)]="pour">
+                    <mat-slider [disabled]="hasVoted" (change)="updateSlidders(1)" step="1" min = 0 [max]="maxPour" [(ngModel)]="pour"></mat-slider>
+                </div>
+                <div>
+                    <h4>Neutre</h4>
+                    <input [disabled]="hasVoted" matInput (change)="updateSlidders(2)" [value]="neutre" type="number" [(ngModel)]="neutre">
+                    <mat-slider [disabled]="hasVoted" (change)="updateSlidders(2)" step="1" min = 0 [max]="maxNeutre" [(ngModel)]="neutre"></mat-slider>
+                </div>
+                <div >
+                    <h4>Contre</h4>
+                    <input [disabled]="hasVoted" (change)="updateSlidders(3)" matInput [value]="contre" type="number" [(ngModel)]="contre">
+                    <mat-slider [disabled]="hasVoted" (change)="updateSlidders(3)" step="1" min = 0 [max]="maxContre" [(ngModel)]="contre"></mat-slider>
+                </div>
+            </div>
+            <button mat-raised-button [disabled]="hasVoted" (click)="ValidateVote()" class="valid-button" color="primary">Valider</button>
+
+        </div>
     </div>
 
 </div>
