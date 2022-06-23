@@ -4,7 +4,7 @@ export class Participant{
     id?:number
     name?:string
     mail?:string
-    participations?:Participation
+    participations!:Participation[]
     points?:number
     DefaultPass?:string
 }

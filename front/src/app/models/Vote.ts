@@ -6,6 +6,6 @@ export class Vote{
     voteNumber?:number
     startTime?:Date
     Duration?:number
-    participations?:Participation
+    participations!: Participation[]
     enCours?:boolean
 }

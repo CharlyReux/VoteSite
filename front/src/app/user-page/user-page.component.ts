@@ -11,8 +11,8 @@ export class UserPageComponent implements OnInit {
 
   routeSlug = ''
 
-  voting: boolean = false;
-  hasVoted:boolean= false;
+  voting: boolean = true;
+  hasVoted: boolean = false;
 
   RemainingTime: number = 0
   RemainingTimeDate: string = ""
@@ -28,6 +28,7 @@ export class UserPageComponent implements OnInit {
 
   //Test value => TODO:
   totalMax = 100;
+  remainingVotes = 100;
 
   constructor(private route: ActivatedRoute) {
     route.params.subscribe(params => this.routeSlug = params['slug'])
@@ -43,34 +44,36 @@ export class UserPageComponent implements OnInit {
 
   }
 
-//TODO: subscribe pour savoir quand le vote commence 
+  //TODO: subscribe pour savoir quand le vote commence 
 
 
-  ValidateVote(){
-    this.hasVoted=true;
+  ValidateVote() {
+    this.hasVoted = true;
   }
 
 
 
   updateSlidders(slidderNum: number) {
+    this.remainingVotes = this.totalMax-this.contre-this.pour-this.neutre;
+
     switch (slidderNum) {
       case 3:
-        if(this.contre<0) this.contre = 0;
-        if(this.contre>this.maxContre) this.contre = this.maxContre;
+        if (this.contre < 0) this.contre = 0;
+        if (this.contre > this.maxContre) this.contre = this.maxContre;
 
         this.maxNeutre = this.totalMax - this.pour - this.contre
         this.maxPour = this.totalMax - this.neutre - this.contre
         break;
       case 2:
-        if(this.neutre<0) this.neutre = 0;
-        if(this.neutre>this.maxNeutre) this.neutre = this.maxNeutre;
+        if (this.neutre < 0) this.neutre = 0;
+        if (this.neutre > this.maxNeutre) this.neutre = this.maxNeutre;
 
         this.maxContre = this.totalMax - this.neutre - this.pour
         this.maxPour = this.totalMax - this.neutre - this.contre
         break;
       case 1:
-        if(this.pour<0) this.pour = 0;
-        if(this.pour>this.maxPour) this.pour = this.maxPour;
+        if (this.pour < 0) this.pour = 0;
+        if (this.pour > this.maxPour) this.pour = this.maxPour;
 
         this.maxNeutre = this.totalMax - this.pour - this.contre
         this.maxContre = this.totalMax - this.neutre - this.pour

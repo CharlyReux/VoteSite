@@ -19,6 +19,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatListModule} from '@angular/material/list';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 
 // Scanner
@@ -29,6 +30,7 @@ import { IdentifyAdminComponent } from './identify-admin/identify-admin.componen
 import { AdminPageComponent } from './admin-page/admin-page.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import { UserPageComponent } from './user-page/user-page.component';
+import { RecapPageComponent } from './recap-page/recap-page.component';
 
 
 
@@ -41,7 +43,8 @@ import { UserPageComponent } from './user-page/user-page.component';
     CreateRoomComponent,
     IdentifyAdminComponent,
     AdminPageComponent,
-    UserPageComponent
+    UserPageComponent,
+    RecapPageComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +64,8 @@ import { UserPageComponent } from './user-page/user-page.component';
     MatDividerModule,
     MatListModule,
     QRCodeModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatExpansionModule
   ],
   providers: [WelcomePageComponent],
   bootstrap: [AppComponent]

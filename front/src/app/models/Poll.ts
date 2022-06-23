@@ -7,7 +7,7 @@ export class Poll{
     description?:string
     slug?:string
     isEnded?:boolean
-    participants?:Participant[]
-    votes?:Vote[]
+    participants!: Participant[]
+    votes!: Vote[]
     adminPass?:string
 }

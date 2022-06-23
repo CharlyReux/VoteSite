@@ -5,6 +5,7 @@ import { CreateRoomComponent } from './create-room/create-room.component';
 import { IdentifyAdminComponent } from './identify-admin/identify-admin.component';
 import { IdentifyUserPageComponent } from './identify-user-page/identify-user-page.component';
 import { JoinPageComponent } from './join-page/join-page.component';
+import { RecapPageComponent } from './recap-page/recap-page.component';
 import { UserPageComponent } from './user-page/user-page.component';
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 
@@ -16,7 +17,8 @@ const routes: Routes = [
   { path: "create", component: CreateRoomComponent },
   { path: "identifyAdmin", component: IdentifyAdminComponent },
   { path: "adminPage/:slug", component: AdminPageComponent },
-  { path: "userPage/:slug", component: UserPageComponent }
+  { path: "userPage/:slug", component: UserPageComponent },
+  { path: "recapPage/:slug", component: RecapPageComponent }
 
 ];
 
