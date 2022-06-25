@@ -3,11 +3,20 @@ import { ActivatedRoute } from '@angular/router';
 import { Participation } from '../models/Participation';
 import { Poll } from '../models/Poll';
 import { Vote } from '../models/Vote';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+
 
 @Component({
   selector: 'app-recap-page',
   templateUrl: './recap-page.component.html',
-  styleUrls: ['./recap-page.component.sass']
+  styleUrls: ['./recap-page.component.sass'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class RecapPageComponent implements OnInit {
 
@@ -31,7 +40,13 @@ export class RecapPageComponent implements OnInit {
     participants: []
   }//Testing data
 
-  displayedColumns =["pour","neutre","contre"]
+  displayedMainColumns =["title","pour","neutre","contre"]
+  displayedInColumns =["pour","neutre","contre"]
+
+  columnsToDisplayWithExpand = [...this.displayedMainColumns, 'expand'];
+  expandedElement:Participation | null | undefined;
+
+
 
   constructor(private route: ActivatedRoute) {
     route.params.subscribe(params => this.routeSlug = params['slug'])

@@ -8,7 +8,7 @@
     <div class="content">
         <div class="notStarted" *ngIf="!started">
             <div class="slugQR">
-                <h2>{{routeSlug}}</h2>
+                <h3>{{routeSlug}}</h3>
                 <qrcode [qrdata]="myAngularxQrCode" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
 
             </div>

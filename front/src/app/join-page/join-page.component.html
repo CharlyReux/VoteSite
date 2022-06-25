@@ -8,14 +8,16 @@
     <div class="form">
 
         <h5>Rentrez l'identifiant de la salle ou scanner son QR code</h5>
+        <form [formGroup]="slugValue">
         <mat-form-field *ngIf="!scannerEnabled" appearance="fill" class="field">
             <mat-label>Identifiant</mat-label>
-            <input matInput placeholder="eX3mPl31" [formControl]="slugPoll" required>
+            <input matInput placeholder="eX3mPl31" [formControl]="slugPoll" formControlName="slug" required>
             <mat-error *ngIf="slugPoll.invalid">{{getErrorMessage()}}</mat-error>
         </mat-form-field>
-        <a *ngIf="!scannerEnabled" mat-raised-button class="menu-button" color="primary">
+    </form>
+        <button *ngIf="!scannerEnabled" (click)="joinPoll()"  mat-raised-button class="menu-button" color="primary">
             <h6>Rejoindre</h6>
-        </a>
+        </button>
         <a mat-raised-button class="menu-button" (click)="enableScanner()" color="primary">
             <h6 *ngIf="!scannerEnabled">Scanner un code</h6>
             <h6 *ngIf="scannerEnabled">Remplir le code à la main</h6>

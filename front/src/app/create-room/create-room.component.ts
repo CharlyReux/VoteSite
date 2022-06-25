@@ -3,6 +3,11 @@ import { Participant } from '../models/Participant';
 import { Poll } from '../models/Poll';
 import { Vote } from '../models/Vote';
 import { FormControl, Validators } from '@angular/forms'
+import { PollService } from '../poll-service';
+import { tokenPoll } from '../models/tokenPoll';
+import { JWTTokenService } from '../jwttoken-service.service';
+import { AppCookieService } from '../app-cookie-service.service';
+import { Router } from '@angular/router';
 
 
 
@@ -62,6 +67,7 @@ const COLUMNS_SCHEMA_VOTE = [
   selector: 'app-create-room',
   templateUrl: './create-room.component.html',
   styleUrls: ['./create-room.component.sass'],
+  providers: [PollService],
   encapsulation: ViewEncapsulation.None
 })
 
@@ -90,7 +96,7 @@ export class CreateRoomComponent implements OnInit {
   requiredTitleVote = new FormControl('', [Validators.required])
 
 
-  constructor() { }
+  constructor(private router:Router,private pollServ: PollService, private jwtServ: JWTTokenService, private cookieServ: AppCookieService) { }
 
   ngOnInit(): void {
 
@@ -141,7 +147,19 @@ export class CreateRoomComponent implements OnInit {
   //TODO: Create the poll and send it to the server
   //and then send the admin to the next page 
   CreatePoll() {
+    this.poll.participants = this.participants;
+    this.poll.votes = this.votes;
+    console.log(this.poll);
 
+    var tkPoll: tokenPoll
+    this.pollServ.createPoll(this.poll).subscribe(tkpollRec => {
+      tkPoll = tkpollRec;
+      this.cookieServ.set("tokenCFDT",tkPoll['jwt-token']);
+      this.cookieServ.set("slugPoll",tkPoll.pollSlug);
+      this.jwtServ.setToken(tkPoll['jwt-token'])
+      this.jwtServ.decodeToken()
+      this.router.navigate(["adminPage/"+tkPoll.pollSlug])
+    });
   }
 
 

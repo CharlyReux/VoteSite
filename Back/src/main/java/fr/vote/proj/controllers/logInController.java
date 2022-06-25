@@ -14,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -129,6 +130,20 @@ public class logInController {
         outMap.put("jwt-token", adminToken);
         outMap.put("pollSlug",savedPoll.getSlug());
         return new ResponseEntity<>(outMap, HttpStatus.CREATED);
+    }
+
+
+
+    @Operation(summary = "Testing that the poll exists")
+    @GetMapping("/verify/{slugPoll}")
+    @Tag(name = "Poll")
+    public ResponseEntity<Boolean> verifyExists(@PathVariable String slugPoll){
+        poll p = pollRepo.findBySlug(slugPoll);
+        if(p ==null){
+            return new ResponseEntity<Boolean>(false,HttpStatus.OK);
+        }else{
+            return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+        }
     }
 
 }

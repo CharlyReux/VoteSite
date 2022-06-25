@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminPageComponent } from './admin-page/admin-page.component';
+import { AuthorizeGuard } from './authorize-guard.service';
 import { CreateRoomComponent } from './create-room/create-room.component';
 import { IdentifyAdminComponent } from './identify-admin/identify-admin.component';
 import { IdentifyUserPageComponent } from './identify-user-page/identify-user-page.component';
@@ -11,14 +12,14 @@ import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 
 const routes: Routes = [
   {path: "welcome", component: WelcomePageComponent},
-  { path: '',   redirectTo: 'welcome', pathMatch: 'full' },
   { path: "join", component: JoinPageComponent },
   { path: "identifyUser/:slug", component: IdentifyUserPageComponent },
   { path: "create", component: CreateRoomComponent },
   { path: "identifyAdmin", component: IdentifyAdminComponent },
-  { path: "adminPage/:slug", component: AdminPageComponent },
-  { path: "userPage/:slug", component: UserPageComponent },
-  { path: "recapPage/:slug", component: RecapPageComponent }
+  { path: "adminPage/:slug", component: AdminPageComponent,canActivate:[AuthorizeGuard] },
+  { path: "userPage/:slug", component: UserPageComponent ,canActivate:[AuthorizeGuard]},
+  { path: "recapPage/:slug", component: RecapPageComponent ,canActivate:[AuthorizeGuard]},
+  { path: '**',   redirectTo: 'welcome', pathMatch: 'full' },
 
 ];
 

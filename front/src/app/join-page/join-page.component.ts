@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl,Validators} from '@angular/forms'
+import {FormBuilder, FormControl,FormGroup,Validators} from '@angular/forms'
 import { Router } from '@angular/router';
+import { Poll } from '../models/Poll';
+import { PollService } from '../poll-service';
 
 @Component({
   selector: 'app-join-page',
@@ -11,6 +13,7 @@ export class JoinPageComponent implements OnInit {
 
   slugPoll = new FormControl('',[Validators.required,Validators.pattern("[a-zA-Z0-9]{8}")])
   scannerEnabled = false
+  slugValue!: FormGroup;
 
   getErrorMessage(){
     if(this.slugPoll.hasError("required")){
@@ -24,20 +27,43 @@ export class JoinPageComponent implements OnInit {
 
   enableScanner(){
     this.scannerEnabled=!this.scannerEnabled
-  }
+  } 
 
+  joinPoll(){
+    var slugValue:string = this.slugValue.get('slug')?.value
+    this.pollServ.verifyExists(slugValue).subscribe(exists=>{
+      if(exists){
+        this.router.navigate(["/identifyUser/"+slugValue])
+    }else{
+        alert("Aucune salle de vote n'existe avec cet identifiant")
+    }})
+  }
 
   onCodeResult(resultString:string){
     var url = new URL(resultString);
     //TODO: verify that the poll exists
     if(url.pathname.startsWith("/identify")){
-      this.router.navigate([url.pathname])
+      var slug:string[] = url.pathname.split("/")
+      console.log(slug[slug.length-1])
+      this.pollServ.verifyExists(slug[slug.length-1]).subscribe(exists=>{
+        if(exists){
+          this.router.navigate(["/identifyUser/"+slug[slug.length-1]])
+        }else{
+          alert("Aucune salle de vote n'existe avec cet identifiant")
+      }})
     }
+
+  
   }
 
 
 
-  constructor(private router:Router) { }
+  constructor(private router:Router,private pollServ:PollService,private formBuilder: FormBuilder) { 
+
+    this.slugValue = this.formBuilder.group({
+      slug: ''
+    });
+  }
 
   ngOnInit(): void {
   }
