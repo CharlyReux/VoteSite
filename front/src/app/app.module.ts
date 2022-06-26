@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
-import { WelcomePageComponent } from './welcome-page/welcome-page.component';
+import { DialogUserHasPreviousPoll, WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { MatButtonModule } from '@angular/material/button'
 import { MatIconModule } from '@angular/material/icon';
 import { JoinPageComponent } from './join-page/join-page.component';
@@ -20,7 +20,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+import {MatDialogModule} from '@angular/material/dialog';
 
 
 // Scanner
@@ -48,7 +49,8 @@ import { PollService } from './poll-service';
     IdentifyAdminComponent,
     AdminPageComponent,
     UserPageComponent,
-    RecapPageComponent
+    RecapPageComponent,
+    DialogUserHasPreviousPoll
   ],
   imports: [
     BrowserModule,
@@ -71,6 +73,7 @@ import { PollService } from './poll-service';
     MatProgressSpinnerModule,
     MatExpansionModule,
     HttpClientModule,
+    MatDialogModule
   ],
   providers: [WelcomePageComponent,
     JoinPageComponent,

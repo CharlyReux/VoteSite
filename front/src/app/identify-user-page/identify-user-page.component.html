@@ -8,10 +8,17 @@
   <div class="form">
 
     <h5>Vous avez rejoins la salle de vote {{routeSlug}}</h5><!-- TODO: remplir par le nom de la salle de vote -->
-    <mat-form-field appearance="fill" class="field">
-      <mat-label>Identifiez vous</mat-label>
-      <input matInput placeholder="votre@mail.com" [formControl]="email" required>
-      <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
-    </mat-form-field>
+    <form [formGroup]="logInForm" (ngSubmit)="identifyUser()">
+      <mat-form-field appearance="fill" class="field">
+        <mat-label>Identifiez vous</mat-label>
+        <input matInput placeholder="votre@mail.com" formControlName="email" required>
+        <mat-error *ngIf="logInForm.get('email')?.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+      <button mat-raised-button type="submit" [disabled]="logInForm.invalid" class="menu-button"  color="primary">
+        <h6 >Rejoindre de vote</h6>
+    </button>
+    <mat-error *ngIf="noMailInRoom" style="font-size: 2vw;">Aucun utilisateur avec ce mail n'existe dans cette salle de vote</mat-error>
+
+    </form>
   </div>
 </div>

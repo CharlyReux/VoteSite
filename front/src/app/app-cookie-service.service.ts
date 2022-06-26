@@ -31,6 +31,11 @@ export class AppCookieService {
     }
 
     set(key: string, value: string) {
-        document.cookie = key + '=' + (value || '')+";"+"Samesite = Lax";
+        document.cookie = `${key} = ; expires=Thu, 1 jan 1990 12:00:00 UTC; path=/`;
+
+        var date = new Date;
+        date.setDate(date.getDate()+1);
+
+        document.cookie = key + '=' + (value || '')+";"+"Samesite = Lax;"+"expires="+date;
     }
 }

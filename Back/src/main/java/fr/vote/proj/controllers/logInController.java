@@ -62,11 +62,11 @@ public class logInController {
 
             authManager.authenticate(authInputToken);
 
-            String token = jwtUtil.generateToken(pollSlug);
+            String token = jwtUtil.generateToken(pollSlug, "admin");
 
             return new ResponseEntity<>(Collections.singletonMap("jwt-token", token), HttpStatus.OK);
         } catch (AuthenticationException authExc) {
-            throw new RuntimeException("Invalid Login Credentials");
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -85,18 +85,18 @@ public class logInController {
                 }
             }
             if (!contains) {
-                throw new RuntimeException("No participants with the mail provided");
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             UsernamePasswordAuthenticationToken authInputToken = new UsernamePasswordAuthenticationToken(mail,
                     mail);
 
             authManager.authenticate(authInputToken);
 
-            String token = jwtUtil.generateToken(mail);
+            String token = jwtUtil.generateToken(mail, "Participant");
 
             return new ResponseEntity<>(Collections.singletonMap("jwt-token", token), HttpStatus.OK);
         } catch (AuthenticationException authExc) {
-            throw new RuntimeException("Invalid Login Credentials");
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -124,25 +124,23 @@ public class logInController {
         }
         poll savedPoll = this.pollRepo.save(poll);
 
-        String adminToken = jwtUtil.generateToken(savedPoll.getSlug());
+        String adminToken = jwtUtil.generateToken(savedPoll.getSlug(), "admin");
 
-        Map<String,Object> outMap = new HashMap<>();
+        Map<String, Object> outMap = new HashMap<>();
         outMap.put("jwt-token", adminToken);
-        outMap.put("pollSlug",savedPoll.getSlug());
+        outMap.put("pollSlug", savedPoll.getSlug());
         return new ResponseEntity<>(outMap, HttpStatus.CREATED);
     }
-
-
 
     @Operation(summary = "Testing that the poll exists")
     @GetMapping("/verify/{slugPoll}")
     @Tag(name = "Poll")
-    public ResponseEntity<Boolean> verifyExists(@PathVariable String slugPoll){
+    public ResponseEntity<Boolean> verifyExists(@PathVariable String slugPoll) {
         poll p = pollRepo.findBySlug(slugPoll);
-        if(p ==null){
-            return new ResponseEntity<Boolean>(false,HttpStatus.OK);
-        }else{
-            return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+        if (p == null) {
+            return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<Boolean>(true, HttpStatus.OK);
         }
     }
 

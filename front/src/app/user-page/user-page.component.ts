@@ -11,7 +11,7 @@ export class UserPageComponent implements OnInit {
 
   routeSlug = ''
 
-  voting: boolean = true;
+  voting: boolean = false;
   hasVoted: boolean = false;
 
   RemainingTime: number = 0

@@ -24,5 +24,6 @@
         <button mat-raised-button type="submit" [disabled]="logInForm.invalid" class="menu-button"  color="primary">
             <h6 >Administrer le vote</h6>
         </button>
+        <mat-error *ngIf="WrongCredentials" style="font-size: 2vw;">Mauvais identifiant ou mot de passe</mat-error>
     </form>
 </div>

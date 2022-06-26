@@ -52,7 +52,7 @@ public class participantPollController {
     private voteRepository voteRepo;
 
     @PostMapping("{slugPoll}/participation/{mailUser}")
-    @Operation(summary = "adds a participation ")
+    @Operation(summary = "adds a participation in the current vote")
     @Transactional
     public ResponseEntity<poll> addParticipation(@RequestBody(required = true) participation participation,
             @PathVariable String slugPoll, @PathVariable String mailUser) {

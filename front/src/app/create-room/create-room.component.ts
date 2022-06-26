@@ -157,7 +157,6 @@ export class CreateRoomComponent implements OnInit {
       this.cookieServ.set("tokenCFDT",tkPoll['jwt-token']);
       this.cookieServ.set("slugPoll",tkPoll.pollSlug);
       this.jwtServ.setToken(tkPoll['jwt-token'])
-      this.jwtServ.decodeToken()
       this.router.navigate(["adminPage/"+tkPoll.pollSlug])
     });
   }

@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
+import { PollService } from '../poll-service';
+import { AppCookieService } from '../app-cookie-service.service';
+import { JWTTokenService } from '../jwttoken-service.service';
 
 @Component({
   selector: 'app-identify-admin',
@@ -11,6 +14,8 @@ import { FormBuilder } from '@angular/forms';
 export class IdentifyAdminComponent implements OnInit {
 
   hide = true;
+  WrongCredentials = false;
+
 
   logInForm = this.formBuilder.group({
     identifier: new FormControl('', [Validators.required, Validators.pattern("[a-zA-Z0-9]{8}")]),
@@ -18,7 +23,8 @@ export class IdentifyAdminComponent implements OnInit {
   })
 
 
-  constructor(private router: Router, private formBuilder: FormBuilder) { }
+  constructor(private router: Router, private formBuilder: FormBuilder
+    ,private pollServ: PollService,private cookieServ: AppCookieService,private jwtServ:JWTTokenService) { }
 
   ngOnInit(): void {
   }
@@ -29,13 +35,20 @@ export class IdentifyAdminComponent implements OnInit {
 
     //send identifier and password and retrieve token and poll
     const slugPoll = this.logInForm.get("identifier")?.value
-
-    //check if errors and throw message
-
-
-    //Send admin to his poll
-    this.router.navigate(["/adminPage", slugPoll])
-
+    const pass = this.logInForm.get("PollPassword")?.value
+    this.pollServ.logAdmin(slugPoll,pass).subscribe({
+      next: tokenJson =>{
+        this.WrongCredentials =false
+        const token:string = tokenJson["jwt-token"]
+        this.cookieServ.set("tokenCFDT",token)
+        this.cookieServ.set("slugPoll",slugPoll)
+        this.jwtServ.setToken(token)
+        this.router.navigate(["/adminPage", slugPoll])
+      },
+      error: (e) =>{
+        this.WrongCredentials = true;
+      }
+    }) 
   }
 
 

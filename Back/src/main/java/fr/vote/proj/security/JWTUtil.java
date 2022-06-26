@@ -18,10 +18,11 @@ public class JWTUtil {
     @Value("${jwt_secret}")
     private String secret;
 
-    public String generateToken(String email) throws IllegalArgumentException, JWTCreationException {
+    public String generateToken(String email,String name) throws IllegalArgumentException, JWTCreationException {
         return JWT.create()
                 .withSubject("User Details")
                 .withClaim("email", email)
+                .withClaim("displayname",name)
                 .withIssuedAt(new Date())
                 .withIssuer("CFDT")
                 .sign(Algorithm.HMAC256(secret));

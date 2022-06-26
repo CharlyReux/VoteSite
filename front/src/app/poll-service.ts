@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Participation } from "./models/Participation";
 import { Poll } from "./models/Poll";
 import { environment } from './../environments/environment';
-import { Observable } from "rxjs";
+import { catchError, Observable, of } from "rxjs";
 import { tokenPoll } from "./models/tokenPoll";
 import { JWTTokenService } from "./jwttoken-service.service";
 
@@ -64,15 +64,16 @@ subscribePoll(slugPoll:string){
 }
 
 ///LOG IN SPECIFIC ENDPOINTS
-logAdmin(slugPoll:string,password:string){
-
+logAdmin(slugPoll:string,password:string):Observable<any>{
+    return this.http.post<any>("/api/log/admin/"+slugPoll,password);
 }
 
-logParticipant(slugPoll:string,mail:string){
-
+logParticipant(slugPoll:string,mail:string):Observable<any>{
+    return this.http.post<any>("/api/log/participant/"+slugPoll,mail)
+    
 }
 
 
-
+ 
 
 }
