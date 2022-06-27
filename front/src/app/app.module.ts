@@ -38,7 +38,6 @@ import { AppCookieService } from './app-cookie-service.service';
 import { PollService } from './poll-service';
 
 
-
 @NgModule({
   declarations: [
     AppComponent,

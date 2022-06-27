@@ -54,7 +54,7 @@ public class poll {
 
     public int nextVote(){
         this.currentVote++;
-        if(this.currentVote>=votes.size()){
+        if(this.currentVote>votes.size()){
             this.isEnded=true;
         }//TOTEST
        return this.currentVote;

@@ -30,8 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeHttpRequests()
                 .antMatchers("/api/log/**").permitAll()
-                .antMatchers("/api/userPart/**").hasRole("PARTICIPANT")
-                .antMatchers("/api/poll/**").hasRole("ADMIN")
+/*                 .antMatchers("/api/userPart/**").hasRole("PARTICIPANT")
+ */                .antMatchers("/api/poll/**").hasRole("ADMIN")
                 .and()
                 .userDetailsService(uds)//TODO: qu'un seul detailsService qui handle les admin et les users
                 .exceptionHandling()

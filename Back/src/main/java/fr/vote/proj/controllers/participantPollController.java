@@ -133,7 +133,7 @@ public class participantPollController {
         try {
             for (List<SseEmitter> listSse : slugToClients.values()) {
                 for (SseEmitter s : listSse) {
-                    s.send(SseEmitter.event().name("message")
+                    s.send(SseEmitter.event().name("heartbeat")
                             .data("heartbeat"));
                 }
             }

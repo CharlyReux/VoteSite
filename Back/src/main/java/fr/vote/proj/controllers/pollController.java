@@ -60,6 +60,7 @@ public class pollController {
         vote v = p.getVotes().get(p.getCurrentVote());
 
         Date d = new Date(System.currentTimeMillis());
+        p.nextVote();
         v.setStartTime(d);
         v.setEnCours(true);
         v.setPoll(p);// TOTEST
@@ -70,7 +71,7 @@ public class pollController {
             for (SseEmitter s : participantPollController.slugToClients.get(pollSlug)) {
                 s.send(SseEmitter.event()
                         .name("startVote")
-                        .data(v));// TOTEST:envoyer les données du vote?
+                        .data(p));
             }
         } catch (IOException e) {
             e.printStackTrace();

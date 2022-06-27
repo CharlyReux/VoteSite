@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { EventSourcePolyfill } from 'event-source-polyfill';
+import { JWTTokenService } from '../jwttoken-service.service';
 import { Vote } from '../models/Vote';
 
 @Component({
@@ -26,11 +28,15 @@ export class UserPageComponent implements OnInit {
   contre = 0
   maxContre = 0;
 
+  private eventSource!: EventSource;
+
+
+
   //Test value => TODO:
   totalMax = 100;
   remainingVotes = 100;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute,private tokenServ:JWTTokenService) {
     route.params.subscribe(params => this.routeSlug = params['slug'])
   }
 
@@ -41,6 +47,7 @@ export class UserPageComponent implements OnInit {
 
     this.neutre = this.totalMax;
     this.maxNeutre = this.totalMax;
+    this.subscribeUser(this.routeSlug)
 
   }
 
@@ -83,4 +90,43 @@ export class UserPageComponent implements OnInit {
     }
   }
 
+  //SSE listener handling
+
+  public subscribeUser(slugPoll: string) {
+    this.eventSource = new EventSourcePolyfill("/api/userPart/subscribe/" + slugPoll, {
+      headers: {
+        'Authorization': "Bearer " + this.tokenServ.jwtToken
+      }
+    });
+
+    this.eventSource.onopen = ((ev) => console.log(ev));
+    this.eventSource.onerror = (ev => null);
+    this.eventSource.addEventListener("heartbeat",()=>{
+      console.log("heartbeat")
+    })
+    this.eventSource.addEventListener("subscribed",(ev)=>{
+      console.log(ev.data);
+      console.log("subscribed");
+    })
+    this.eventSource.addEventListener("subscribed",(ev)=>{
+      console.log(ev.data);
+      console.log("subscribed");
+    })
+    this.eventSource.addEventListener("endVote",()=>{
+      console.log("endVote");
+    })
+    this.eventSource.addEventListener("startVote",(ev)=>{
+      console.log(ev.data);
+      console.log("endVote");
+    })
+
+  }
+
 }
+
+
+//TODO: Les sse marches en partie, genre le subscribed a l'air bon, il faut vérifier le fonctionnement des autres.
+/*
+Il faut aussi vérifier dans le back startVote et nextVotes ce qu'ils font exactement parce que c'est pas ultra clair
+Pas oublier que l'endpoint pour subscribe est plus sécurisé comme il fallais que je teste avec le navigateur
+*/
