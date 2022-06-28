@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 /*                 .antMatchers("/api/userPart/**").hasRole("PARTICIPANT")
  */                .antMatchers("/api/poll/**").hasRole("ADMIN")
                 .and()
-                .userDetailsService(uds)//TODO: qu'un seul detailsService qui handle les admin et les users
+                .userDetailsService(uds)
                 .exceptionHandling()
                     .authenticationEntryPoint(
                             (request, response, authException) ->

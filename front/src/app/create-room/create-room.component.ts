@@ -95,6 +95,9 @@ export class CreateRoomComponent implements OnInit {
   positiveDuration = new FormControl('', [Validators.required, Validators.min(1)])
   requiredTitleVote = new FormControl('', [Validators.required])
 
+  alreadyUsedMail = ""
+  alreadyUsedBoolean =false;
+
 
   constructor(private router:Router,private pollServ: PollService, private jwtServ: JWTTokenService, private cookieServ: AppCookieService) { }
 
@@ -154,6 +157,14 @@ export class CreateRoomComponent implements OnInit {
     var tkPoll: tokenPoll
     this.pollServ.createPoll(this.poll).subscribe(tkpollRec => {
       tkPoll = tkpollRec;
+
+      if(tkPoll.alreadyExists!=null){
+        this.alreadyUsedBoolean = true;
+        this.alreadyUsedMail = tkPoll.alreadyExists
+        return
+      }
+
+
       this.cookieServ.set("tokenCFDT",tkPoll['jwt-token']);
       this.cookieServ.set("slugPoll",tkPoll.pollSlug);
       this.jwtServ.setToken(tkPoll['jwt-token'])

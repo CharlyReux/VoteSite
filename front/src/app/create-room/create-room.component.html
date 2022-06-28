@@ -202,6 +202,8 @@
             <!-- *ngFor="let col of columnsSchemaVote" -->
             <div class="NPbutton">
                 <button mat-raised-button class="menu-button" matStepperPrevious color="primary">Précedent</button>
+                <mat-error *ngIf="alreadyUsedBoolean">
+                    le mail {{this.alreadyUsedMail}} est déjà utilisé dans une autre salle de vote</mat-error>
                 <button mat-raised-button (click)="CreatePoll()" class="menu-button" matStepperNext color="primary" *ngIf="AllFormIsValid()">
                     Créer la salle
                 </button>

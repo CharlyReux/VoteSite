@@ -107,6 +107,15 @@ public class logInController {
     public ResponseEntity<Map<String, Object>> createPoll(
             @RequestBody(required = true) poll poll) {
 
+        // first checking that users does not already exists
+        for (participant p : poll.getParticipants()) {
+            if (partRepo.findByMail(p.getMail()) != null) {
+                Map<String, Object> outMap = new HashMap<>();
+                outMap.put("alreadyExists", p.getMail());
+                return new ResponseEntity<>(outMap, HttpStatus.OK);
+            }
+        }
+
         // Encrypting the password
         poll.setAdminPass(passwordEncoder.encode(poll.getAdminPass()));
 

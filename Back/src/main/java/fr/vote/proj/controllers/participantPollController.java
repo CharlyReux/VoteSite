@@ -84,7 +84,6 @@ public class participantPollController {
 
         // adding to the user
         part.getParticipations().add(participation);
-        part.setPoll(p);
         this.partRepo.save(part);
 
         // adding to the vote

@@ -60,7 +60,6 @@ public class pollController {
         vote v = p.getVotes().get(p.getCurrentVote());
 
         Date d = new Date(System.currentTimeMillis());
-        p.nextVote();
         v.setStartTime(d);
         v.setEnCours(true);
         v.setPoll(p);// TOTEST
