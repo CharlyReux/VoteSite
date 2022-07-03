@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Poll } from '../models/Poll';
 import { Vote } from '../models/Vote';
+import { PollService } from '../poll-service';
 
 @Component({
   selector: 'app-admin-page',
@@ -17,10 +19,11 @@ export class AdminPageComponent implements OnInit {
 
   RemainingTime: number = 0
   RemainingTimeDate: string = ""
+  poll:Poll = new Poll()
   currentVote: Vote = new Vote()
   voteState = "begin";
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute,private router:Router,private pollServ:PollService) {
     route.params.subscribe(params => this.routeSlug = params['slug'])
     this.myAngularxQrCode = "http://localhost:4200/identify/" + this.routeSlug
   }
@@ -28,6 +31,10 @@ export class AdminPageComponent implements OnInit {
   ngOnInit(): void {
     this.RemainingTimeDate = new Date(this.RemainingTime * 1000).toISOString().slice(11, 19);
 
+    this.pollServ.getPoll(this.routeSlug).subscribe(p=>{
+      this.poll = p
+      this.currentVote = this.poll.votes[0]
+    })
     //Temporary to test the thing
     this.currentVote.title = "testVote"
     this.currentVote.description = "oui ou ioiu lorem sit amet dolor yes yes adfoiqsmdnv posdif qmosidnf poqisdfpo qishfpoiqhs pdf qsoifn"
@@ -36,6 +43,8 @@ export class AdminPageComponent implements OnInit {
 
   startVote() {
     this.voteState="voting";
+    this.pollServ
+
     //TODO: send data to server and start timer
     //if timer = 0 set voteencour to false and go on
   }

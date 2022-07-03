@@ -47,16 +47,16 @@ public class pollController {
     @Autowired
     private voteRepository voteRepo;
 
-
     // sse endpoints
-
-
 
     @Operation(summary = "starts the current vote")
     @GetMapping("/startVote/{pollSlug}")
     @Tag(name = "Poll")
     public void startVote(@PathVariable String pollSlug) {
         poll p = this.pollRepo.findBySlug(pollSlug);
+
+
+
         vote v = p.getVotes().get(p.getCurrentVote());
 
         Date d = new Date(System.currentTimeMillis());
@@ -66,11 +66,20 @@ public class pollController {
         this.voteRepo.save(v);
         this.pollRepo.save(p);
 
+        // creating a simple version of the vote to send to the user
+        Map<String, Object> simpleVote = new HashMap<>();
+        simpleVote.put("title", v.getTitle());
+        simpleVote.put("description", v.getDescription());
+        simpleVote.put("startTime", v.getStartTime());
+        simpleVote.put("Duration", v.getDuration());
+        simpleVote.put("isEnded", p.isEnded());
+
+
         try {
             for (SseEmitter s : participantPollController.slugToClients.get(pollSlug)) {
                 s.send(SseEmitter.event()
                         .name("startVote")
-                        .data(p));
+                        .data(simpleVote));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -85,13 +94,25 @@ public class pollController {
                 v.setPoll(p);
                 voteRepo.save(v);
                 pollRepo.save(p);
+                // creating a simple version of the vote to send to the user
+                Map<String, Object> simpleVote = new HashMap<>();
+                simpleVote.put("title", v.getTitle());
+                simpleVote.put("description", v.getDescription());
+                simpleVote.put("startTime", v.getStartTime());
+                simpleVote.put("Duration", v.getDuration());
+                simpleVote.put("isEnded", p.isEnded());
+
                 try {
                     for (SseEmitter s : participantPollController.slugToClients.get(pollSlug)) {
                         s.send(SseEmitter.event()
-                                .name("endVote"));
+                                .name("endVote")
+                                .data(simpleVote));
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+                if(p.isEnded()){
+                    participantPollController.slugToClients.remove(pollSlug);
                 }
             }
 
@@ -112,20 +133,32 @@ public class pollController {
         return new ResponseEntity<List<poll>>(p, HttpStatus.OK);
     }
 
-
-
     @Operation(summary = "switch to the next vote")
     @PutMapping(path = "/nextVote/{slugPoll}")
     @Tag(name = "Poll")
     @Transactional
     public ResponseEntity<poll> nextVote(@PathVariable String slugPoll) {
         poll p = this.pollRepo.findBySlug(slugPoll);
+        if (p == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         p.nextVote();
         poll savedPoll = this.pollRepo.save(p);
         return new ResponseEntity<>(savedPoll, HttpStatus.OK);
     }
 
-    
+
+    @Operation(summary = "switch to the next vote")
+    @PutMapping(path = "/getPoll/{slugPoll}")
+    @Tag(name = "Poll")
+    @Transactional
+    public ResponseEntity<poll> getPollBySlug(@PathVariable String slugPoll) {
+        poll p = this.pollRepo.findBySlug(slugPoll);
+        if (p == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(p, HttpStatus.OK);
+    }
 
     // vote specific endpoints
     @Tag(name = "Votes")

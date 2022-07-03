@@ -22,6 +22,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { HttpClientModule } from '@angular/common/http';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 
 // Scanner
@@ -72,7 +73,8 @@ import { PollService } from './poll-service';
     MatProgressSpinnerModule,
     MatExpansionModule,
     HttpClientModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTooltipModule
   ],
   providers: [WelcomePageComponent,
     JoinPageComponent,

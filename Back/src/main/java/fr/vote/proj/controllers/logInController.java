@@ -77,10 +77,16 @@ public class logInController {
             @RequestBody(required = true) String mail) {
         try {
             List<participant> l = pollRepo.findBySlug(pollSlug).getParticipants();
+            
+            Map<String, Object> outMap = new HashMap<>();
+            
             boolean contains = false;
             for (participant p : l) {
                 if (p.getMail().equals(mail)) {
                     contains = true;
+                    outMap.put("userPoints", p.getPoints());
+                    outMap.put("name", p.getName());
+                    outMap.put("mail", p.getMail());
                     break;
                 }
             }
@@ -93,8 +99,9 @@ public class logInController {
             authManager.authenticate(authInputToken);
 
             String token = jwtUtil.generateToken(mail, "Participant");
-
-            return new ResponseEntity<>(Collections.singletonMap("jwt-token", token), HttpStatus.OK);
+            outMap.put("jwt-token", token);
+            
+            return new ResponseEntity<>(outMap, HttpStatus.OK);
         } catch (AuthenticationException authExc) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -146,7 +153,7 @@ public class logInController {
     @Tag(name = "Poll")
     public ResponseEntity<Boolean> verifyExists(@PathVariable String slugPoll) {
         poll p = pollRepo.findBySlug(slugPoll);
-        if (p == null) {
+        if (p == null || p.isEnded()) {
             return new ResponseEntity<Boolean>(false, HttpStatus.OK);
         } else {
             return new ResponseEntity<Boolean>(true, HttpStatus.OK);

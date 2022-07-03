@@ -19,8 +19,10 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("deprecation")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired private JWTFilter filter;
-    @Autowired private MyUserDetailsService uds;
+    @Autowired
+    private JWTFilter filter;
+    @Autowired
+    private MyUserDetailsService uds;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -30,15 +32,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeHttpRequests()
                 .antMatchers("/api/log/**").permitAll()
-/*                 .antMatchers("/api/userPart/**").hasRole("PARTICIPANT")
- */                .antMatchers("/api/poll/**").hasRole("ADMIN")
+                .antMatchers("/api/userPart/**").hasRole("PARTICIPANT")
+                .antMatchers("/api/poll/**").hasRole("ADMIN")
                 .and()
                 .userDetailsService(uds)
                 .exceptionHandling()
-                    .authenticationEntryPoint(
-                            (request, response, authException) ->
-                                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
-                    )
+                .authenticationEntryPoint(
+                        (request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+                                "Unauthorized"))
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

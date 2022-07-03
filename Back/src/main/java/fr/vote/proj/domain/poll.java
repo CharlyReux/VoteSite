@@ -50,13 +50,14 @@ public class poll {
         this.participants = participants;
         this.votes = votes;
         this.currentVote = currentVote;
+        if(votes.size()==1) isEnded = true;
     }
 
     public int nextVote(){
         this.currentVote++;
-        if(this.currentVote>votes.size()){
+        if(this.currentVote>=votes.size()-1){
             this.isEnded=true;
-        }//TOTEST
+        }
        return this.currentVote;
     }
 

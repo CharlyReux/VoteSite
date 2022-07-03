@@ -51,6 +51,9 @@ export class IdentifyUserPageComponent implements OnInit {
         const token:string = tokenJson["jwt-token"]
         this.cookieServ.set("tokenCFDT",token)
         this.cookieServ.set("slugPoll",this.routeSlug)
+        this.cookieServ.set("curParticipant",tokenJson["name"])
+        this.cookieServ.set("curMail",tokenJson["mail"])
+        this.cookieServ.set("curParticipantPoints",tokenJson["userPoints"])
         this.jwtServ.setToken(token)
         this.router.navigate(["userPage/"+this.routeSlug])  
       },

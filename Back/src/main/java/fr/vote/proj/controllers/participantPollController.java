@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,15 +30,14 @@ import fr.vote.proj.services.participationRepository;
 import fr.vote.proj.services.pollRepository;
 import fr.vote.proj.services.voteRepository;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
+@EnableScheduling
 @RequestMapping("/api/userPart")
 public class participantPollController {
     // Poll participation specific endpoints
 
     public static Map<String, List<SseEmitter>> slugToClients = new HashMap<String, List<SseEmitter>>();
-
 
     @Autowired
     private pollRepository pollRepo;
@@ -56,6 +56,9 @@ public class participantPollController {
     @Transactional
     public ResponseEntity<poll> addParticipation(@RequestBody(required = true) participation participation,
             @PathVariable String slugPoll, @PathVariable String mailUser) {
+
+
+
         // finds the poll specified
         poll p = this.pollRepo.findBySlug(slugPoll);
         if (p == null) {
@@ -68,8 +71,11 @@ public class participantPollController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         if (part.hasVoted(p.getCurrentVote())) {
-            return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
+        if (!p.getVotes().get(p.getCurrentVote()).isEnCours()) {
+            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+        } // TOTEST
 
         // verifying the vote
         int idCurrentVote = p.getCurrentVote();
@@ -92,9 +98,9 @@ public class participantPollController {
         this.voteRepo.save(currentVote);
 
         // saving the poll
-        poll savedPoll = this.pollRepo.save(p);
+        this.pollRepo.save(p);
 
-        return new ResponseEntity<>(savedPoll, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Operation(summary = "Subscribes to the poll")
@@ -115,29 +121,36 @@ public class participantPollController {
             newSseList.add(emitter);
             slugToClients.put(pollSlug, newSseList);
         }
+        // creating a simple object just to send data to the user
+        Map<String, Object> subscribedEvent = new HashMap<>();
+        subscribedEvent.put("voteSlug", p.getSlug());
 
         try {
             emitter.send(SseEmitter.event()
                     .name("subscribed")
-                    .data(p));
+                    .data(subscribedEvent));
         } catch (IOException e) {
             e.printStackTrace();
         }
         return new ResponseEntity<>(emitter, HttpStatus.OK);
     }
 
-  
     @Scheduled(fixedRate = 30000)
     public void keepConnect() {
-        try {
+            // creating a simple object just to send heartBeat to the user
+            Map<String, Object> subscribedEvent = new HashMap<>();
+            subscribedEvent.put("heartBeat", "heartNeat");
+
             for (List<SseEmitter> listSse : slugToClients.values()) {
                 for (SseEmitter s : listSse) {
-                    s.send(SseEmitter.event().name("heartbeat")
-                            .data("heartbeat"));
+                    try {
+                        s.send(SseEmitter.event().name("heartbeat")
+                        .data("heartbeat"));
+                        
+                    } catch (Exception e) {
+                    }
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 }

@@ -44,24 +44,24 @@ verifyExists(slugPoll:string):Observable<boolean>{
     return this.http.get<boolean>("/api/log/verify/"+slugPoll);
 }
 
-getAllPoll(){
-
-}
 
 nextVote(slugPoll:string){
-
+    return this.http.put<Poll>("/api/poll/nextVote/"+slugPoll,null,this.requestOptions())
 }
 
 startVote(slugPoll:string){
+    return this.http.get<any>("/api/poll/startVote/"+slugPoll,this.requestOptions())
+}
 
+getPoll(slugPoll:string){
+    return this.http.get<Poll>("api/poll/getPoll/"+slugPoll,this.requestOptions())
 }
 
 //PARTICIPATION SPECIFIC ENDPOINTS
 addParticipation(slugPoll:string,mailUser:string,participation:Participation){
+    return this.http.post<any>("/api/userPart/"+slugPoll+"/participation/"+mailUser,participation,this.requestOptions());
 }
 
-subscribePoll(slugPoll:string){
-}
 
 ///LOG IN SPECIFIC ENDPOINTS
 logAdmin(slugPoll:string,password:string):Observable<any>{

@@ -38,4 +38,12 @@ export class AppCookieService {
 
         document.cookie = key + '=' + (value || '')+";"+"Samesite = Lax;"+"expires="+date;
     }
+
+    removeAll(){
+        this.remove("curMail")
+        this.remove("curParticipant")
+        this.remove("curParticipantPoints")
+        this.remove("slugPoll")
+        this.remove("tokenCFDT")
+    }
 }

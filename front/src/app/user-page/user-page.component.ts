@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, NgZone, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { JWTTokenService } from '../jwttoken-service.service';
 import { Vote } from '../models/Vote';
 import { SseClient } from 'ngx-sse-client';
 import { HttpHeaders } from '@angular/common/http';
+import { SimpleVote } from '../models/SimpleVote';
+import { AppCookieService } from '../app-cookie-service.service';
+import { PollService } from '../poll-service';
+import { Participation } from '../models/Participation';
 
 
 @Component({
@@ -17,11 +21,19 @@ export class UserPageComponent implements OnInit {
 
   voting: boolean = false;
   hasVoted: boolean = false;
+  lastVote:boolean = false;
 
   RemainingTime: number = 0
   RemainingTimeDate: string = ""
+  interval:any
 
-  currentVote: Vote = new Vote()
+  currentVote: SimpleVote ={
+    title: '',
+    description: '',
+    startTime: "",
+    Duration: 0,
+    isEnded: false
+  };
 
   pour = 0;
   maxPour = 0;
@@ -33,35 +45,45 @@ export class UserPageComponent implements OnInit {
 
 
   //Test value => TODO:
-  totalMax = 100;
-  remainingVotes = 100;
+  totalMax = 0;
+  remainingVotes = 0;
 
-  constructor(private route: ActivatedRoute, private tokenServ: JWTTokenService, private sseClient: SseClient) {
+  constructor(private zone:NgZone,private router:Router,private route: ActivatedRoute,private cookieServ:AppCookieService, private tokenServ: JWTTokenService, private sseClient: SseClient,private pollServ:PollService) {
     route.params.subscribe(params => this.routeSlug = params['slug'])
   }
 
   ngOnInit(): void {
     this.RemainingTimeDate = new Date(this.RemainingTime * 1000).toISOString().slice(11, 19)
-    this.currentVote.title = "testVote"
-    this.currentVote.description = "oui ou ioiu lorem sit amet dolor yes yes adfoiqsmdnv posdif qmosidnf poqisdfpo qishfpoiqhs pdf qsoifn"
-
+    const total:string | null =this.cookieServ.get("curParticipantPoints");
+    if(total==null){
+      alert("une erreur est survenue, veuillez retournez au menu et vous ré-identifier")
+      return
+    }
+    this.totalMax = +total
+    this.remainingVotes = +total;
     this.neutre = this.totalMax;
     this.maxNeutre = this.totalMax;
     this.subscribeUser(this.routeSlug)
 
   }
 
-  //TODO: subscribe pour savoir quand le vote commence 
 
 
   ValidateVote() {
     this.hasVoted = true;
+    const mail:string|null = this.cookieServ.get("curMail");
+    const name:string|null = this.cookieServ.get("curParticipant");
+    if(mail==null || name==null){
+      alert("une erreur est survenue, veuillez retournez au menu et vous ré-identifier")
+      return
+    }
+    const userPart:Participation = {nameUser:name,contre:this.contre,neutre:this.neutre,pour:this.pour}
+    this.pollServ.addParticipation(this.routeSlug,mail,userPart).subscribe()
   }
 
 
 
   updateSlidders(slidderNum: number) {
-    this.remainingVotes = this.totalMax - this.contre - this.pour - this.neutre;
 
     switch (slidderNum) {
       case 3:
@@ -88,7 +110,27 @@ export class UserPageComponent implements OnInit {
       default:
         break;
     }
+    this.remainingVotes = this.totalMax - this.contre - this.pour - this.neutre;
+
   }
+
+
+  startTimer() {
+    this.interval= setInterval(() => {
+      if(this.RemainingTime > 0) {
+        this.RemainingTime--;
+      } else {
+        this.RemainingTime = 0;
+        if(this.lastVote){
+          this.router.navigate([""])
+        }
+        this.hasVoted = true;
+        clearInterval(this.interval)
+      }
+      this.RemainingTimeDate = new Date(this.RemainingTime * 1000).toISOString().slice(11, 19)
+    },1000)
+  }
+
 
   //SSE listener handling
 
@@ -98,7 +140,41 @@ export class UserPageComponent implements OnInit {
     )
 
     this.sseClient.stream("/api/userPart/subscribe/" + slugPoll, { keepAlive: true, reconnectionDelay: 1_000, responseType: 'event' }, { headers }).subscribe((event) => {
-      console.log(event.type)
+      switch(event.type){
+        case "heartbeat":
+        break;
+        case "startVote":
+          this.zone.run(()=>{
+            //parsing json
+            const sv:string = (event as MessageEvent).data
+            let tmpJSONobj = JSON.parse(sv);
+            this.currentVote = <SimpleVote>tmpJSONobj
+            
+            const currentStartTime = new Date(this.currentVote.startTime)
+
+            //changing the current data
+            this.hasVoted =false;
+            this.voting = true;
+            this.RemainingTime =this.currentVote.Duration - (new Date().getSeconds() - currentStartTime.getSeconds())
+            this.lastVote = this.currentVote.isEnded;
+            this.startTimer();
+
+          })
+          break;
+        case "endVote":
+          this.zone.run(()=>{
+ 
+            if(this.lastVote){
+              alert("Les votes sont désormais finis")
+              this.router.navigate([""])
+              this.cookieServ.removeAll()
+            }
+          this.hasVoted = true;
+        })
+        break;
+      }
+
+
     })
 
 
@@ -117,7 +193,4 @@ export class UserPageComponent implements OnInit {
 
 /*
 TODO:Pas oublier que l'endpoint pour subscribe est plus sécurisé comme il fallais que je teste avec le navigateur
-TODO:on reçoit bien les startVote mais pas les endvotes sans doute parce qu'il y a pas de données envoyé et c'est pareil pour les heartbeat
-(et on s'en branle pas parce qu'il faut quand meme que la connection reste entre client/server isnon cé kc) en fait je sais pas si ça se trouve la conneciton reste quand meme meme si il montre pas les données
-Dans le doute autant envoyer des données quand meme de la part du serv (mais le heartbeat envoie qd meme quelquechose donc what??) ah mais en fait le délai du heartbeat doit être vraiment long c'est pour ça
 */

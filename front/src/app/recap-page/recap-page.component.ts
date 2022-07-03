@@ -22,18 +22,17 @@ export class RecapPageComponent implements OnInit {
 
   routeSlug =""
 
-  //TODO: make a function in the backEnd to get the participant associated with a participation
-  finalScores:Participation[] =[{contre:5,pour:10,neutre:30}]
+  finalScores:Participation[] =[{contre:5,pour:10,neutre:30,nameUser:"test"}]
 
   poll:Poll={
     votes: [
       {
         title: "test1", participations: [
-          { contre: 5, pour: 10, neutre: 30 }, { contre: 5, pour: 7, neutre: 30 }, { contre: 28, pour: 35, neutre: 1 }
+          { contre: 5, pour: 10, neutre: 30 ,nameUser:"testm1"}, { contre: 5, pour: 7, neutre: 30 ,nameUser:"testm2"}, { contre: 28, pour: 35, neutre: 1 ,nameUser:"testm3"}
         ]
       }, {
         title: "test2", participations: [
-          { contre: 5, pour: 10, neutre: 30 }, { contre: 5, pour: 7, neutre: 30 }, { contre: 28, pour: 35, neutre: 1 }
+          { contre: 5, pour: 10, neutre: 30 ,nameUser:"testm1"}, { contre: 5, pour: 7, neutre: 30 ,nameUser:"testm2"}, { contre: 28, pour: 35, neutre: 1 ,nameUser:"testm3"}
         ]
       }
     ],
