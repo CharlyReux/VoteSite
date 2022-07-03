@@ -23,12 +23,12 @@ export class RecapPageComponent implements OnInit {
 
   routeSlug =""
 
-  finalScores:Participation[] =[{contre:5,pour:10,neutre:30,nameUser:"test"}]
+  finalScores:Participation[] =[]
 
   poll:Poll = new Poll//Testing data
 
   displayedMainColumns =["title","pour","neutre","contre"]
-  displayedInColumns =["pour","neutre","contre"]
+  displayedInColumns =["nameUser","pour","neutre","contre"]
 
   columnsToDisplayWithExpand = [...this.displayedMainColumns, 'expand'];
   expandedElement:Participation | null | undefined;
@@ -46,9 +46,6 @@ export class RecapPageComponent implements OnInit {
     this.pollServ.getPoll(this.routeSlug).subscribe(p=>{
       this.poll = p
     })
-
-  //testing data //TODO:
-
 
   }
 

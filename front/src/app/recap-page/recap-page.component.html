@@ -51,6 +51,12 @@
                         <!-- What to show when expanded -->
 
                         <table mat-table [dataSource]="element.participations" class="tabVotes">
+ 
+                            <ng-container matColumnDef="nameUser">
+                                <th mat-header-cell *matHeaderCellDef> Participant </th>
+                                <td mat-cell *matCellDef="let row"> {{row.pour}} </td>
+                            </ng-container>
+ 
                             <ng-container matColumnDef="pour">
                                 <th mat-header-cell *matHeaderCellDef> pour </th>
                                 <td mat-cell *matCellDef="let row"> {{row.pour}} </td>

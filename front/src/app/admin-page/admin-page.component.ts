@@ -30,7 +30,6 @@ export class AdminPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.RemainingTimeDate = new Date(this.RemainingTime * 1000).toISOString().slice(11, 19);
 
     this.pollServ.getPoll(this.routeSlug).subscribe(p=>{
       this.poll = p
@@ -43,6 +42,8 @@ export class AdminPageComponent implements OnInit {
       }
       
       this.RemainingTime = this.currentVote.duration
+      this.RemainingTimeDate = new Date(this.RemainingTime * 1000).toISOString().slice(11, 19);
+
     })
   
   }
