@@ -4,6 +4,7 @@ import { Participation } from '../models/Participation';
 import { Poll } from '../models/Poll';
 import { Vote } from '../models/Vote';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import { PollService } from '../poll-service';
 
 
 @Component({
@@ -24,20 +25,7 @@ export class RecapPageComponent implements OnInit {
 
   finalScores:Participation[] =[{contre:5,pour:10,neutre:30,nameUser:"test"}]
 
-  poll:Poll={
-    votes: [
-      {
-        title: "test1", participations: [
-          { contre: 5, pour: 10, neutre: 30 ,nameUser:"testm1"}, { contre: 5, pour: 7, neutre: 30 ,nameUser:"testm2"}, { contre: 28, pour: 35, neutre: 1 ,nameUser:"testm3"}
-        ]
-      }, {
-        title: "test2", participations: [
-          { contre: 5, pour: 10, neutre: 30 ,nameUser:"testm1"}, { contre: 5, pour: 7, neutre: 30 ,nameUser:"testm2"}, { contre: 28, pour: 35, neutre: 1 ,nameUser:"testm3"}
-        ]
-      }
-    ],
-    participants: []
-  }//Testing data
+  poll:Poll = new Poll//Testing data
 
   displayedMainColumns =["title","pour","neutre","contre"]
   displayedInColumns =["pour","neutre","contre"]
@@ -47,7 +35,7 @@ export class RecapPageComponent implements OnInit {
 
 
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute,private pollServ:PollService) {
     route.params.subscribe(params => this.routeSlug = params['slug'])
   }
 
@@ -55,6 +43,9 @@ export class RecapPageComponent implements OnInit {
 
     const votesTest:Vote[] = this.poll.votes
 
+    this.pollServ.getPoll(this.routeSlug).subscribe(p=>{
+      this.poll = p
+    })
 
   //testing data //TODO:
 

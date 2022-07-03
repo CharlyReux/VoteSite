@@ -149,7 +149,7 @@ public class pollController {
 
 
     @Operation(summary = "switch to the next vote")
-    @PutMapping(path = "/getPoll/{slugPoll}")
+    @GetMapping(path = "/getPoll/{slugPoll}")
     @Tag(name = "Poll")
     @Transactional
     public ResponseEntity<poll> getPollBySlug(@PathVariable String slugPoll) {

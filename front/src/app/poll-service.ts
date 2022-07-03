@@ -25,7 +25,7 @@ requestOptions(){
         "Authorization":""
       }
     if(token){
-        headerDict['Authorization'] = token;
+        headerDict['Authorization'] = "Bearer "+token;
     }
 
     return {                                                                                                                                                                             

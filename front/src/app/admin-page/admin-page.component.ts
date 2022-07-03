@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { JWTTokenService } from '../jwttoken-service.service';
 import { Poll } from '../models/Poll';
 import { Vote } from '../models/Vote';
 import { PollService } from '../poll-service';
@@ -15,15 +16,15 @@ export class AdminPageComponent implements OnInit {
   routeSlug = ''
   myAngularxQrCode
 
-  //TODO:on button click start voteRoom
-
   RemainingTime: number = 0
   RemainingTimeDate: string = ""
+  interval:any
   poll:Poll = new Poll()
   currentVote: Vote = new Vote()
+  currentVoteNumber:number = 0
   voteState = "begin";
 
-  constructor(private route: ActivatedRoute,private router:Router,private pollServ:PollService) {
+  constructor(private jwtServ:JWTTokenService,private route: ActivatedRoute,private router:Router,private pollServ:PollService) {
     route.params.subscribe(params => this.routeSlug = params['slug'])
     this.myAngularxQrCode = "http://localhost:4200/identify/" + this.routeSlug
   }
@@ -34,27 +35,54 @@ export class AdminPageComponent implements OnInit {
     this.pollServ.getPoll(this.routeSlug).subscribe(p=>{
       this.poll = p
       this.currentVote = this.poll.votes[0]
+      console.log(this.poll.votes[0])
+      console.log(this.currentVote);
+      if(this.currentVote.duration==null){
+        console.log("nop")
+        return
+      }
+      
+      this.RemainingTime = this.currentVote.duration
     })
-    //Temporary to test the thing
-    this.currentVote.title = "testVote"
-    this.currentVote.description = "oui ou ioiu lorem sit amet dolor yes yes adfoiqsmdnv posdif qmosidnf poqisdfpo qishfpoiqhs pdf qsoifn"
-
+  
   }
 
   startVote() {
     this.voteState="voting";
-    this.pollServ
+    this.pollServ.startVote(this.routeSlug).subscribe(()=>{
+      if(this.currentVote.duration!=null){
+        this.RemainingTime = this.currentVote.duration
+      }
+      this.startTimer()
+    })
 
-    //TODO: send data to server and start timer
-    //if timer = 0 set voteencour to false and go on
   }
 
   nextVote() {
-    //TODO: send data to server
-    //
+    this.pollServ.nextVote(this.routeSlug).subscribe(()=>{
+      this.currentVoteNumber++
+      this.currentVote = this.poll.votes[this.currentVoteNumber]
+      this.voteState="begin"
+    })
   }
 
   
+  startTimer() {
+    this.interval= setInterval(() => {
+      if(this.RemainingTime > 0) {
+        this.RemainingTime--;
+      } else {
+        this.RemainingTime = 0;
+        if(this.currentVote == this.poll.votes[this.poll.votes.length-1]){
+          this.voteState =""
+          this.router.navigate(["recapPage/"+this.routeSlug])
+        }
+        this.voteState = "ended"
+        clearInterval(this.interval)
+      }
+      this.RemainingTimeDate = new Date(this.RemainingTime * 1000).toISOString().slice(11, 19)
+    },1000)
+  }
 
 
 }

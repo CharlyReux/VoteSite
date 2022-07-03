@@ -5,7 +5,7 @@ export class Vote{
     description?:string
     voteNumber?:number
     startTime?:Date
-    Duration?:number
+    duration?:number
     participations!: Participation[]
     enCours?:boolean
 }

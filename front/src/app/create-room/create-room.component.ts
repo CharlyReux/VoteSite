@@ -134,7 +134,7 @@ export class CreateRoomComponent implements OnInit {
   addVote() {
     var v = new Vote()
     v.title = "titre"
-    v.Duration = 5
+    v.duration = 5
     v.description = ""
     this.votes.push(v)
     this.votes = [...this.votes]
@@ -152,7 +152,6 @@ export class CreateRoomComponent implements OnInit {
   CreatePoll() {
     this.poll.participants = this.participants;
     this.poll.votes = this.votes;
-    console.log(this.poll);
 
     var tkPoll: tokenPoll
     this.pollServ.createPoll(this.poll).subscribe(tkpollRec => {
