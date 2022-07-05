@@ -147,8 +147,7 @@ export class CreateRoomComponent implements OnInit {
   }
 
 
-  //TODO: Create the poll and send it to the server
-  //and then send the admin to the next page 
+
   CreatePoll() {
     this.poll.participants = this.participants;
     this.poll.votes = this.votes;

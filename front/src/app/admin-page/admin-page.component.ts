@@ -34,10 +34,8 @@ export class AdminPageComponent implements OnInit {
     this.pollServ.getPoll(this.routeSlug).subscribe(p=>{
       this.poll = p
       this.currentVote = this.poll.votes[0]
-      console.log(this.poll.votes[0])
-      console.log(this.currentVote);
+      this.currentVoteNumber = this.poll.currentVote
       if(this.currentVote.duration==null){
-        console.log("nop")
         return
       }
       

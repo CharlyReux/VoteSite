@@ -57,8 +57,6 @@ public class participantPollController {
     public ResponseEntity<poll> addParticipation(@RequestBody(required = true) participation participation,
             @PathVariable String slugPoll, @PathVariable String mailUser) {
 
-
-
         // finds the poll specified
         poll p = this.pollRepo.findBySlug(slugPoll);
         if (p == null) {
@@ -75,7 +73,7 @@ public class participantPollController {
         }
         if (!p.getVotes().get(p.getCurrentVote()).isEnCours()) {
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
-        } // TOTEST
+        }
 
         // verifying the vote
         int idCurrentVote = p.getCurrentVote();
@@ -113,6 +111,13 @@ public class participantPollController {
         }
         // creating a new emitter
         SseEmitter emitter = new SseEmitter(600000L);
+        // handling completion and errors TOTEST
+        emitter.onCompletion(() -> {
+            slugToClients.get(pollSlug).remove(emitter);
+        });
+        emitter.onError((arg0) -> {
+            slugToClients.get(pollSlug).remove(emitter);
+        });
         // adding the emitter to the map
         if (slugToClients.containsKey(pollSlug)) {
             slugToClients.get(pollSlug).add(emitter);
@@ -129,6 +134,7 @@ public class participantPollController {
             emitter.send(SseEmitter.event()
                     .name("subscribed")
                     .data(subscribedEvent));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -137,20 +143,20 @@ public class participantPollController {
 
     @Scheduled(fixedRate = 30000)
     public void keepConnect() {
-            // creating a simple object just to send heartBeat to the user
-            Map<String, Object> subscribedEvent = new HashMap<>();
-            subscribedEvent.put("heartBeat", "heartNeat");
+        // creating a simple object just to send heartBeat to the user
+        Map<String, Object> subscribedEvent = new HashMap<>();
+        subscribedEvent.put("heartBeat", "heartNeat");
 
-            for (List<SseEmitter> listSse : slugToClients.values()) {
-                for (SseEmitter s : listSse) {
-                    try {
-                        s.send(SseEmitter.event().name("heartbeat")
-                        .data("heartbeat"));
-                        
-                    } catch (Exception e) {
-                    }
+        for (List<SseEmitter> listSse : slugToClients.values()) {
+            for (SseEmitter s : listSse) {
+                try {
+                    s.send(SseEmitter.event().name("heartbeat")
+                            .data("heartbeat"));
+
+                } catch (Exception e) {
                 }
             }
+        }
 
     }
 }

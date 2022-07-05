@@ -57,6 +57,10 @@ getPoll(slugPoll:string){
     return this.http.get<Poll>("api/poll/getPoll/"+slugPoll,this.requestOptions())
 }
 
+deletePoll(slugPoll:string):Observable<Poll>{
+    return this.http.delete<Poll>("/api/poll/delPoll/"+slugPoll,this.requestOptions());
+}
+
 //PARTICIPATION SPECIFIC ENDPOINTS
 addParticipation(slugPoll:string,mailUser:string,participation:Participation){
     return this.http.post<any>("/api/userPart/"+slugPoll+"/participation/"+mailUser,participation,this.requestOptions());

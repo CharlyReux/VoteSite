@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,9 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import fr.vote.proj.domain.participant;
+import fr.vote.proj.domain.participation;
 import fr.vote.proj.domain.poll;
 import fr.vote.proj.domain.vote;
 import fr.vote.proj.services.participantRepository;
+import fr.vote.proj.services.participationRepository;
 import fr.vote.proj.services.pollRepository;
 import fr.vote.proj.services.voteRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,6 +50,10 @@ public class pollController {
     @Autowired
     private voteRepository voteRepo;
 
+
+    @Autowired
+    private participationRepository partionRepo;
+
     // sse endpoints
 
     @Operation(summary = "starts the current vote")
@@ -55,14 +62,12 @@ public class pollController {
     public void startVote(@PathVariable String pollSlug) {
         poll p = this.pollRepo.findBySlug(pollSlug);
 
-
-
         vote v = p.getVotes().get(p.getCurrentVote());
 
         Date d = new Date(System.currentTimeMillis());
         v.setStartTime(d);
         v.setEnCours(true);
-        v.setPoll(p);// TOTEST
+        v.setPoll(p);
         this.voteRepo.save(v);
         this.pollRepo.save(p);
 
@@ -73,7 +78,6 @@ public class pollController {
         simpleVote.put("startTime", v.getStartTime());
         simpleVote.put("Duration", v.getDuration());
         simpleVote.put("isEnded", p.isEnded());
-
 
         try {
             for (SseEmitter s : participantPollController.slugToClients.get(pollSlug)) {
@@ -111,7 +115,7 @@ public class pollController {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                if(p.isEnded()){
+                if (p.isEnded()) {
                     participantPollController.slugToClients.remove(pollSlug);
                 }
             }
@@ -147,7 +151,6 @@ public class pollController {
         return new ResponseEntity<>(savedPoll, HttpStatus.OK);
     }
 
-
     @Operation(summary = "switch to the next vote")
     @GetMapping(path = "/getPoll/{slugPoll}")
     @Tag(name = "Poll")
@@ -157,6 +160,20 @@ public class pollController {
         if (p == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        return new ResponseEntity<>(p, HttpStatus.OK);
+    }
+
+    @Operation(summary = "delete the poll with the specified ID")
+    @DeleteMapping(path = "/delPoll/{slugPoll}")
+    @Tag(name = "Poll")
+    @Transactional
+    public ResponseEntity<poll> deletePollBySlug(@PathVariable String slugPoll) {
+        poll p = this.pollRepo.findBySlug(slugPoll);
+        if(p==null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        this.pollRepo.delete(p);
+
         return new ResponseEntity<>(p, HttpStatus.OK);
     }
 

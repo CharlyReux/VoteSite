@@ -41,7 +41,6 @@ export class JoinPageComponent implements OnInit {
 
   onCodeResult(resultString:string){
     var url = new URL(resultString);
-    //TODO: verify that the poll exists
     if(url.pathname.startsWith("/identify")){
       var slug:string[] = url.pathname.split("/")
       console.log(slug[slug.length-1])

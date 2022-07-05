@@ -44,7 +44,6 @@ export class UserPageComponent implements OnInit {
 
 
 
-  //Test value => TODO:
   totalMax = 0;
   remainingVotes = 0;
 
@@ -190,7 +189,3 @@ export class UserPageComponent implements OnInit {
 
 }
 
-
-/*
-TODO:Pas oublier que l'endpoint pour subscribe est plus sécurisé comme il fallais que je teste avec le navigateur
-*/

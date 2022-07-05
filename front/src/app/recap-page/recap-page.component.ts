@@ -5,6 +5,7 @@ import { Poll } from '../models/Poll';
 import { Vote } from '../models/Vote';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { PollService } from '../poll-service';
+import { AppCookieService } from '../app-cookie-service.service';
 
 
 @Component({
@@ -25,7 +26,7 @@ export class RecapPageComponent implements OnInit {
 
   finalScores:Participation[] =[]
 
-  poll:Poll = new Poll//Testing data
+  poll:Poll = new Poll
 
   displayedMainColumns =["title","pour","neutre","contre"]
   displayedInColumns =["nameUser","pour","neutre","contre"]
@@ -35,7 +36,7 @@ export class RecapPageComponent implements OnInit {
 
 
 
-  constructor(private route: ActivatedRoute,private pollServ:PollService) {
+  constructor(private cookieServ:AppCookieService,private route: ActivatedRoute,private pollServ:PollService) {
     route.params.subscribe(params => this.routeSlug = params['slug'])
   }
 
@@ -43,9 +44,11 @@ export class RecapPageComponent implements OnInit {
 
     const votesTest:Vote[] = this.poll.votes
 
-    this.pollServ.getPoll(this.routeSlug).subscribe(p=>{
+    this.pollServ.deletePoll(this.routeSlug).subscribe(p=>{
       this.poll = p
+      this.cookieServ.removeAll();
     })
+
 
   }
 

@@ -31,7 +31,7 @@ export class IdentifyAdminComponent implements OnInit {
 
 
 
-  identifyAdmin() {//TODO: identify admin and send to server
+  identifyAdmin() {
 
     //send identifier and password and retrieve token and poll
     const slugPoll = this.logInForm.get("identifier")?.value

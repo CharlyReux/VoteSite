@@ -10,4 +10,5 @@ export class Poll{
     participants!: Participant[]
     votes!: Vote[]
     adminPass?:string
+    currentVote!:number
 }
