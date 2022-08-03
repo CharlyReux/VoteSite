@@ -9,7 +9,7 @@ The Admin can start the votes whenever he wants, it will pause between each vote
 
 ## Front-end
 The front-end is made using angular and I really took advantage of angular material to make the UI.<br>
-This was pretty much my first real experience with angular but I don't think it is that awful.<br>
+This was pretty much my first real experience with angular and I think it is somewht "decent".<br>
 
 ## Back-end
 The back-end is made with spring-boot, which was also my first experience with. I had some prior knowledge with java so it helped me get into it pretty quickly.<br>
